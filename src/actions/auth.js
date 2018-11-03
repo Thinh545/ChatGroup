@@ -13,6 +13,18 @@ export const startLogin = () => {
       // The signed-in user info.
       const user = result.user;
       const name = user.displayName ? user.displayName : user.email;
+      database.ref(`users/${user.uid}`).once("value", function (data) {
+        if (!data.val()) {
+          database.ref(`users/${user.uid}`).set({
+            uid: user.uid,
+            name: name,
+            email: user.email,
+            photo: user.photoURL,
+            token: token,
+            active: true
+          })
+        }
+      })
     });
     //return firebase.auth().signInWithRedirect(provider);
     firebase.auth().getRedirectResult().then(function (result) {
@@ -53,6 +65,7 @@ export const logout = () => ({
 
 export const startLogout = () => {
   return () => {
+    
     return firebase.auth().signOut();
   };
 };
