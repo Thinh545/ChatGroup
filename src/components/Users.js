@@ -2,6 +2,7 @@ import React from 'react';
 import User from './User'
 import { connect } from 'react-redux';
 import { startUsersList } from '../actions/users'
+import AppRouter, { history } from '../routers/AppRouter';
 
 export class Users extends React.Component {
 
@@ -12,25 +13,24 @@ export class Users extends React.Component {
     //     return result;
     // }
 
-    onSubmit() {
-        
+    handleOnClick = (userID) => {
+        history.push(`/${userID}`);
     }
 
     render() {
         this.props.startUsersList();
-        console.log(this.props.users)
-        return (
-            <div class="people-list" id="people-list">
-                <div class="search">
-                    <input type="text" placeholder="search" />
-                    <i class="fa fa-search"></i>
-                </div>
+        let listUser = [];
+        this.props.users.forEach(element => {
+            if (element.uid !== this.props.auth.uid)
+                listUser.push(
+                    <User data={element} handleOnClick={this.handleOnClick} />
+                )
+        });
 
-                <ul class="list">
-                    {this.props.users.map(function (item) {
-                        console.log(item)
-                        return <User data={item} />
-                    })}
+        return (
+            <div id="contacts">
+                <ul>
+                    {listUser}
                 </ul>
             </div>
         )
@@ -39,6 +39,7 @@ export class Users extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+    auth: state.auth,
     users: state.users,
 });
 

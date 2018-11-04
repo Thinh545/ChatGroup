@@ -3,12 +3,13 @@ import React from 'react';
 export class User extends React.Component {
     render() {
         return (
-            <li class="clearfix">
-                <img class="square" src={this.props.data.photo} alt="avatar" />
-                <div class="about">
-                    <div class="name">{this.props.data.name}</div>
-                    <div class="status">
-                        online
+            <li className="contact" onClick={() => this.props.handleOnClick(this.props.data.uid)}>
+                <div className="wrap">
+                    <span className={this.props.data.active ? "contact-status online" : "contact-status"}></span>
+                    <img src={this.props.data.photo} alt="" />
+                    <div className="meta">
+                        <p className="name">{this.props.data.name}</p>
+                        <p className="preview">active ago</p>
                     </div>
                 </div>
             </li>
