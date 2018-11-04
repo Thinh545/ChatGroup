@@ -12,6 +12,10 @@ export class Users extends React.Component {
     //     return result;
     // }
 
+    onSubmit() {
+        
+    }
+
     render() {
         this.props.startUsersList();
         console.log(this.props.users)
