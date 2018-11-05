@@ -9,7 +9,11 @@ export class User extends React.Component {
                     <img src={this.props.data.photo} alt="" />
                     <div className="meta">
                         <p className="name">{this.props.data.name}</p>
-                        <p className="preview">active ago</p>
+                        <p className="preview">
+                            {
+                                this.props.data.active ? "online: " : this.props.data.lastTime
+                            }
+                        </p>
                     </div>
                 </div>
             </li>

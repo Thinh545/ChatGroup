@@ -1,4 +1,5 @@
 import database, { firebase, authProvider as provider } from '../firebase/firebase';
+import dateformat from 'dateformat'
 
 export const login = (uid, displayName, photoURL) => ({
   type: 'LOGIN',
@@ -39,6 +40,7 @@ export const logout = () => ({
 export const startLogout = () => {
   return () => {
     database.ref(`users/${firebase.auth().currentUser.uid}/active`).set(false)
+    database.ref(`users/${firebase.auth().currentUser.uid}/lastTime`).set(dateformat(Date(), "yyyy/dd/mm HH:MM"))
     return firebase.auth().signOut();
   };
 };
