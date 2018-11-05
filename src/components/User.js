@@ -1,9 +1,13 @@
 import React from 'react';
 
 export class User extends React.Component {
+    clickOnUser = () => {
+        this.props.handleOnClick(this.props.data)
+    }
+
     render() {
         return (
-            <li className="contact" onClick={() => this.props.handleOnClick(this.props.data)}>
+            <li className="contact" onClick={this.clickOnUser}>
                 <div className="wrap">
                     <span className={this.props.data.active ? "contact-status online" : "contact-status"}></span>
                     <img src={this.props.data.photo} alt="" />

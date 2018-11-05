@@ -9,14 +9,14 @@ const defaultState = {
 export default (state = defaultState, action) => {
     switch (action.type) {
         case 'MESSAGES_CHANGE':
-            if (action.messages)
-                state.list = action.messages
+            if (action.list)
+                state.list = action.list
             return state;
 
         case 'USER_CHANGE':
             state.uid = action.uid;
-            if (action.messages)
-                state.list = action.messages;
+            if (action.list)
+                state.list = action.list;
             return state;
 
         default:

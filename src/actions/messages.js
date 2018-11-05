@@ -14,15 +14,12 @@ export const userChange = (uid, list) => ({
 
 export const sendMessage = (uid, text) => {
     return (dispatch, getState) => {
-        console.log(text);
-        const auth = firebase.auth().currentUser;
+        const auth = getState().auth
         if (auth) {
             const authid = auth.uid;
-            const displayName = auth.displayName;
             const message = {
-                sender: { authid, displayName },
+                uid: authid,
                 text,
-                time: Date.now(),
             }
 
             let url;
@@ -31,7 +28,7 @@ export const sendMessage = (uid, text) => {
             else
                 url = uid + authid;
 
-            database.ref(`messages/${url}`).push(message);
+            return database.ref(`messages/${url}`).push(message);
         }
     }
 }
@@ -45,13 +42,12 @@ export const startUserChange = (uid) => {
         else
             url = uid + auth.uid;
 
-        database.ref(`messages/${url}`).once('value', (msgSnapshot) => {
+        return database.ref(`messages/${url}`).once('value', (msgSnapshot) => {
             if (msgSnapshot.val()) {
                 let mess = [];
                 msgSnapshot.forEach((childSnapshot) => {
                     mess.push(childSnapshot.toJSON());
                 })
-
                 dispatch(userChange(uid, mess));
             } else {
                 dispatch(userChange(uid, []))
@@ -70,15 +66,16 @@ export const startListening = (uid) => {
         else
             url = uid + auth.uid;
 
-        return database.ref(`messages/${url}`).on('child_added', (msgSnapshot) => {
-            if (getState().message.uid === uid) {
-                let mess = [];
-                msgSnapshot.forEach((childSnapshot) => {
-                    mess.push(childSnapshot.toJSON());
-                })
+        let messRef = database.ref(`messages/${url}`);
 
-                dispatch(messageChange(mess))
-            }
+        messRef.on('child_added', function (msgSnapshot) {
+            let mess = [];
+            msgSnapshot.forEach((childSnapshot) => {
+                mess.push(childSnapshot.toJSON());
+            })
+
+            console.log(mess);
+            dispatch(messageChange(mess))
         })
     }
 }

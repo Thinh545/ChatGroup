@@ -8,11 +8,11 @@ export const usersList = (list) => ({
 export const startUsersList = () => {
     return (dispatch, getState) => {
         let list = [];
-        database.ref('users').once("value", function (snapshot) {
+        return database.ref('users').once("value", function (snapshot) {
             snapshot.forEach((childSnapshot) => {
                 list.push(childSnapshot.toJSON())    
             });
-            dispatch(usersList(list));
+            return dispatch(usersList(list));
         })
     }
 }

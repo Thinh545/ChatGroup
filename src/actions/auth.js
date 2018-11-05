@@ -1,11 +1,11 @@
 import database, { firebase, authProvider as provider } from '../firebase/firebase';
 import dateformat from 'dateformat'
 
-export const login = (uid, displayName, photoURL) => ({
+export const login = (uid, name, photo) => ({
   type: 'LOGIN',
   uid,
-  displayName,
-  photoURL
+  name,
+  photo
 });
 
 export const startLogin = () => {
@@ -20,9 +20,7 @@ export const startLogin = () => {
           database.ref(`users/${user.uid}`).set({
             uid: user.uid,
             name: name,
-            email: user.email,
             photo: user.photoURL,
-            token: token,
             active: true
           })
         } else {

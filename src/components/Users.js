@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { startUsersList } from '../actions/users'
 
 export class Users extends React.Component {
+    componentWillMount() {
+        this.props.startUsersList();
+    }
 
     render() {
-        this.props.startUsersList();
         let listUser = [];
         this.props.users.forEach(element => {
             if (element.uid !== this.props.auth.uid)

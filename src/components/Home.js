@@ -1,32 +1,32 @@
 import React from 'react';
 import Users from './Users'
 import Messages from './Messages'
-import firebase from 'firebase'
-import { startUserChange } from '../actions/messages'
 import { connect } from 'react-redux';
 
 export class Home extends React.Component {
     state = {
-        user: null,
+        user: {
+            uid: null,
+        },
     }
 
     handleOnClick = (user) => {
-        this.setState({
-            user: user,
-        })
-
-        this.props.startUserChange(user.uid);
+        if (user !== this.state.user.uid) {
+            this.setState({
+                user: user,
+            })
+        }
     }
 
     render() {
-        const auth = firebase.auth().currentUser;
+        const auth = this.props.auth;
         return (
             <div id="frame">
                 <div id="sidepanel">
                     <div id="profile">
                         <div className="wrap">
-                            <img id="profile-img" src={auth.photoURL} className="online" alt="" />
-                            <p>{auth.displayName}</p>
+                            <img id="profile-img" src={auth.photo} className="online" alt="" />
+                            <p>{auth.name}</p>
                             <i className="fa fa-chevron-down expand-button" aria-hidden="true"></i>
                             <div id="status-options">
                                 <ul>
@@ -66,8 +66,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    startUserChange: (uid) => dispatch(startUserChange(uid))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, undefined)(Home);
