@@ -1,11 +1,25 @@
 import React from 'react';
 import Users from './Users'
+import Messages from './Messages'
 import firebase from 'firebase'
+import { startUserChange } from '../actions/messages'
+import { connect } from 'react-redux';
 
 export class Home extends React.Component {
+    state = {
+        user: null,
+    }
+
+    handleOnClick = (user) => {
+        this.setState({
+            user: user,
+        })
+
+        this.props.startUserChange(user.uid);
+    }
+
     render() {
         const auth = firebase.auth().currentUser;
-        console.log(auth)
         return (
             <div id="frame">
                 <div id="sidepanel">
@@ -35,18 +49,25 @@ export class Home extends React.Component {
                     </div>
 
                     <div id="search">
-                        <label for=""><i className="fa fa-search" aria-hidden="true"></i></label>
+                        <label htmlFor=""><i className="fa fa-search" aria-hidden="true"></i></label>
                         <input type="text" placeholder="Search contacts..." />
                     </div>
 
-                    <Users />
+                    <Users handleOnClick={this.handleOnClick} />
                 </div>
 
-                <div className="content">
-                </div>
+                <Messages user={this.state.user} />
             </div>
         )
     }
 }
 
-export default Home
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    startUserChange: (uid) => dispatch(startUserChange(uid))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -2,20 +2,8 @@ import React from 'react';
 import User from './User'
 import { connect } from 'react-redux';
 import { startUsersList } from '../actions/users'
-import AppRouter, { history } from '../routers/AppRouter';
 
 export class Users extends React.Component {
-
-    // renderUser() {
-    //     this.props.startUsersList();
-    //     let result = [];
-
-    //     return result;
-    // }
-
-    handleOnClick = (userID) => {
-        history.push(`/${userID}`);
-    }
 
     render() {
         this.props.startUsersList();
@@ -23,7 +11,7 @@ export class Users extends React.Component {
         this.props.users.forEach(element => {
             if (element.uid !== this.props.auth.uid)
                 listUser.push(
-                    <User data={element} handleOnClick={this.handleOnClick} />
+                    <User data={element} handleOnClick={this.props.handleOnClick} />
                 )
         });
 
