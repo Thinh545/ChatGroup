@@ -2,22 +2,29 @@ import moment from 'moment'
 import { stat } from 'fs';
 
 const defaultState = {
-    uid: null,
+    user: null,
     list: [],
 };
 
 export default (state = defaultState, action) => {
     switch (action.type) {
         case 'MESSAGES_CHANGE':
-            if (action.list)
-                state.list = action.list
-            return state;
+            return {
+                user: state.user,
+                list: [...state.list, action.mess]
+            }
 
         case 'USER_CHANGE':
-            state.uid = action.uid;
             if (action.list)
-                state.list = action.list;
-            return state;
+                return ({
+                    user: action.user,
+                    list: action.list,
+                })
+            else
+                return {
+                    user: action.user,
+                    list: []
+                }
 
         default:
             return state;

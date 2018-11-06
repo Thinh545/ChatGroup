@@ -17,6 +17,14 @@ export class Messages extends React.Component {
         e.target.reset();
     }
 
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: "auto" });
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
     render() {
         let listMess = [];
         this.props.mess.list.forEach(element => {
@@ -41,6 +49,10 @@ export class Messages extends React.Component {
                     <ul>
                         {listMess}
                     </ul>
+
+                    <div style={{ float: "left", clear: "both" }}
+                        ref={(el) => { this.messagesEnd = el; }}>
+                    </div>
                 </div>
 
                 <div className="message-input">
@@ -61,6 +73,7 @@ export class Messages extends React.Component {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    user: state.messages.user,
     mess: state.messages,
 });
 

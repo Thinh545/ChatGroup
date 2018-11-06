@@ -8,7 +8,7 @@ export const usersList = (list) => ({
 export const startUsersList = () => {
     return (dispatch, getState) => {
         let list = [];
-        return database.ref('users').once("value", function (snapshot) {
+        return database.ref('users').on("value", function (snapshot) {
             snapshot.forEach((childSnapshot) => {
                 list.push(childSnapshot.toJSON())    
             });
