@@ -1,4 +1,3 @@
-import database, { firebase } from '../firebase/firebase';
 import moment from 'moment'
 
 export const messageChange = (mess) => ({
@@ -13,7 +12,7 @@ export const userChange = (user, list) => ({
 })
 
 export const sendMessage = (uid, text) => {
-    return (dispatch, getState) => {
+    return (dispatch, getState, getFirebase) => {
         const auth = getState().auth
         if (auth) {
             const authid = auth.uid;
@@ -28,25 +27,26 @@ export const sendMessage = (uid, text) => {
             else
                 url = uid + authid;
 
-            return database.ref(`messages/${url}`).push(message);
+            return getFirebase().database().ref(`messages/${url}`).push(message);
         }
     }
 }
 
 export const startUserChange = (user) => {
-    return (dispatch, getState) => {
+    return (dispatch, getState, getFirebase) => {
         if (getState().messages.user) {
             dispatch(endListening(getState().messages.user.uid))
         }
 
-        const auth = firebase.auth().currentUser;
+        const firebase = getFirebase();
+        const auth = getState().auth;
         let url;
         if (auth.uid > user.uid)
             url = auth.uid + user.uid;
         else
             url = user.uid + auth.uid;
 
-        return database.ref(`messages/${url}`).once('value', (msgSnapshot) => {
+        return firebase.database().ref(`messages/${url}`).once('value', (msgSnapshot) => {
             if (msgSnapshot.val()) {
                 let mess = [];
                 msgSnapshot.forEach((childSnapshot) => {
@@ -65,8 +65,9 @@ export const startUserChange = (user) => {
 }
 
 export const startListening = (uid) => {
-    return (dispatch, getState) => {
+    return (dispatch, getState, getFirebase) => {
         const auth = getState().auth;
+        const firebase = getFirebase();
 
         let url;
         if (auth.uid > uid)
@@ -74,7 +75,7 @@ export const startListening = (uid) => {
         else
             url = uid + auth.uid;
 
-        let messRef = database.ref(`messages/${url}`);
+        let messRef = firebase.database().ref(`messages/${url}`);
 
         messRef.limitToLast(1).on('child_added', function (msgSnapshot) {
             dispatch(messageChange(msgSnapshot.toJSON()))
@@ -83,8 +84,9 @@ export const startListening = (uid) => {
 }
 
 export const endListening = (uid) => {
-    return (dispatch, getState) => {
+    return (dispatch, getState, getFirebase) => {
         const auth = getState().auth;
+        const firebase = getFirebase();
 
         let url;
         if (auth.uid > uid)
@@ -92,6 +94,6 @@ export const endListening = (uid) => {
         else
             url = uid + auth.uid;
 
-        database.ref(`messages/${url}`).off();
+        firebase.database().ref(`messages/${url}`).off();
     }
 }

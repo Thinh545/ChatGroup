@@ -1,4 +1,10 @@
-import * as firebase from 'firebase';
+import { compose, combineReducers, applyMiddleware, createStore } from 'redux'
+import { reactReduxFirebase, getFirebase, firebaseReducer } from 'react-redux-firebase'
+import firebase from 'firebase'
+import thunk from 'redux-thunk';
+import authReducer from '../reducers/auth';
+import usersReducer from '../reducers/users'
+import messagesReducer from '../reducers/messages'
 
 var config = {
   apiKey: "AIzaSyA9bkol6af0Wz-ozhS78n2TOs3LNya8xGg",
@@ -9,9 +15,29 @@ var config = {
   messagingSenderId: "660645655047"
 };
 
-firebase.initializeApp(config);
+const configDB = {
+  userProfile: 'users', // firebase root where user profiles are stored
+  firebaseStateName: 'firebase' // should match the reducer name ('firebase' is default)
+}
 
-const database = firebase.database();
-const authProvider = new firebase.auth.GoogleAuthProvider();
+export function configureStore(initialState = {}) {
+  firebase.initializeApp(config)
 
-export { firebase, authProvider, database as default };
+  const createStoreWithFirebase =
+    compose(reactReduxFirebase(firebase, configDB),
+      applyMiddleware(thunk.withExtraArgument(getFirebase))
+    )(createStore)
+
+  const store = createStoreWithFirebase(
+    combineReducers({
+      firebase: firebaseReducer,
+      auth: authReducer,
+      users: usersReducer,
+      messages: messagesReducer,
+    })
+  )
+
+  return store;
+}
+
+export { firebase, configureStore as default };

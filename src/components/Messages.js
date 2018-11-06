@@ -36,7 +36,7 @@ export class Messages extends React.Component {
         return (
             <div className="content">
                 <div className="contact-profile">
-                    <img src={this.props.user ? this.props.user.photo : ""} alt="" />
+                    <img src={this.props.user ? this.props.user.avatarUrl : ""} alt="" />
                     <p>{this.props.user ? this.props.user.displayName : ""}</p>
                     <div className="social-media">
                         <i className="fa fa-facebook" aria-hidden="true"></i>

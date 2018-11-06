@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import AppRouter, { history } from './routers/AppRouter';
-import configureStore from './store/configureStore';
 import { login, logout } from './actions/auth';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
-import database, { firebase } from './firebase/firebase';
+import { firebase, configureStore } from './firebase/firebase';
 
-const store = configureStore();
+
+const initialState = window.__INITIAL_STATE__ // set initial state here
+const store = configureStore(initialState);
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {

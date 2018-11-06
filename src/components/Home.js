@@ -16,8 +16,8 @@ export class Home extends React.Component {
                 <div id="sidepanel">
                     <div id="profile">
                         <div className="wrap">
-                            <img id="profile-img" src={auth.photo} className="online" alt="" />
-                            <p>{auth.name}</p>
+                            <img id="profile-img" src={auth.avatarUrl} className="online" alt="" />
+                            <p>{auth.displayName}</p>
                             <i className="fa fa-chevron-down expand-button" aria-hidden="true"></i>
                             <div id="status-options">
                                 <ul>

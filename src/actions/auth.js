@@ -1,4 +1,3 @@
-import database, { firebase, authProvider as provider } from '../firebase/firebase';
 import dateformat from 'dateformat'
 
 export const login = (uid, name, photo) => ({
@@ -9,24 +8,13 @@ export const login = (uid, name, photo) => ({
 });
 
 export const startLogin = () =>
-  () => {
-    return firebase.auth().signInWithPopup(provider).then((result) => {
-      var token = result.credential.accessToken;
+  (dispatch, getState, getFirebase) => {
+    const firebase = getFirebase();
+    return firebase.login({ provider: 'google', type: 'popup' }).then((result) => {
       // The signed-in user info.
       const user = result.user;
-      const name = user.displayName ? user.displayName : user.email;
-      database.ref(`users/${user.uid}`).once("value", function (data) {
-        if (!data.val()) {
-          database.ref(`users/${user.uid}`).set({
-            uid: user.uid,
-            name: name,
-            photo: user.photoURL,
-            active: true
-          })
-        } else {
-          database.ref(`users/${user.uid}/active`).set(true)
-        }
-      })
+      firebase.database().ref(`users/${user.uid}/uid`).set(user.uid)
+      firebase.database().ref(`users/${user.uid}/active`).set(true)
     });
   };
 
@@ -35,8 +23,11 @@ export const logout = () => ({
 });
 
 export const startLogout = () =>
-  () => {
-    database.ref(`users/${firebase.auth().currentUser.uid}/active`).set(false)
-    database.ref(`users/${firebase.auth().currentUser.uid}/lastTime`).set(dateformat(Date(), "yyyy/dd/mm HH:MM"))
-    return firebase.auth().signOut();
+  (dispatch, getState, getFirebase) => {
+    const auth = getState().auth;
+    const database = getFirebase().database();
+
+    database.ref(`users/${auth.uid}/active`).set(false)
+    database.ref(`users/${auth.uid}/lastTime`).set(dateformat(Date(), "yyyy/dd/mm HH:MM"))
+    return getFirebase().auth().signOut();
   };
