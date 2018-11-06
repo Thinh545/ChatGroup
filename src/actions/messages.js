@@ -1,5 +1,3 @@
-import moment from 'moment'
-
 export const messageChange = (mess) => ({
     type: 'MESSAGES_CHANGE',
     mess: mess,

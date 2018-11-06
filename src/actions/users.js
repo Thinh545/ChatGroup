@@ -6,7 +6,6 @@ export const usersList = (list) => ({
 export const startUsersList = () => {
     return (dispatch, getState, getFirebase) => {
         const firebase = getFirebase();
-        let list = [];
         return firebase.database().ref('users').on("value", function (snapshot) {
             let list = [];
             snapshot.forEach((childSnapshot) => {

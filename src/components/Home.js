@@ -2,9 +2,14 @@ import React from 'react';
 import Users from './Users'
 import Messages from './Messages'
 import { connect } from 'react-redux';
+import { startOnline } from '../actions/auth'
 import { startUserChange } from '../actions/messages'
 
 export class Home extends React.Component {
+    componentWillMount() {
+        this.props.startOnline();
+    }
+
     handleOnClick = (user) => {
         this.props.startUserChange(user);
     }
@@ -60,6 +65,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     startUserChange: (uid) => dispatch(startUserChange(uid)),
+    startOnline: () => dispatch(startOnline()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

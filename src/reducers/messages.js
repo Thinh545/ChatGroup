@@ -1,6 +1,3 @@
-import moment from 'moment'
-import { stat } from 'fs';
-
 const defaultState = {
     user: {
         uid: null,

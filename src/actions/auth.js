@@ -14,9 +14,17 @@ export const startLogin = () =>
       // The signed-in user info.
       const user = result.user;
       firebase.database().ref(`users/${user.uid}/uid`).set(user.uid)
-      firebase.database().ref(`users/${user.uid}/active`).set(true)
     });
   };
+
+export const startOnline = () =>
+  (dispatch, getState, getFirebase) => {
+    getFirebase().database().ref(`users/${getState().auth.uid}`).update({ active: true })
+    getFirebase().database().ref(`users/${getState().auth.uid}`).onDisconnect().update({
+      active: false,
+      lastTime: dateformat(Date(), "yyyy/dd/mm HH:MM"),
+    })
+  }
 
 export const logout = () => ({
   type: 'LOGOUT'
@@ -27,7 +35,9 @@ export const startLogout = () =>
     const auth = getState().auth;
     const database = getFirebase().database();
 
-    database.ref(`users/${auth.uid}/active`).set(false)
-    database.ref(`users/${auth.uid}/lastTime`).set(dateformat(Date(), "yyyy/dd/mm HH:MM"))
+    database.ref(`users/${auth.uid}`).update({
+      active: false,
+      lastTime: dateformat(Date(), "yyyy/dd/mm HH:MM"),
+    })
     return getFirebase().auth().signOut();
   };
