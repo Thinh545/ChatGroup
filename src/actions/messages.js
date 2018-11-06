@@ -49,6 +49,7 @@ export const startUserChange = (uid) => {
                     mess.push(childSnapshot.toJSON());
                 })
                 dispatch(userChange(uid, mess));
+                console.log(getState().messages)
             } else {
                 dispatch(userChange(uid, []))
             }

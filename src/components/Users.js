@@ -8,19 +8,23 @@ export class Users extends React.Component {
         this.props.startUsersList();
     }
 
-    render() {
+    createUserComponent = () => {
         let listUser = [];
         this.props.users.forEach(element => {
             if (element.uid !== this.props.auth.uid)
                 listUser.push(
-                    <User data={element} handleOnClick={this.props.handleOnClick} />
+                    <User key={element.uid} user={element} handleOnClick={this.props.handleOnClick} />
                 )
         });
 
+        return listUser;
+    }
+
+    render() {
         return (
             <div id="contacts">
                 <ul>
-                    {listUser}
+                    {this.createUserComponent()}
                 </ul>
             </div>
         )

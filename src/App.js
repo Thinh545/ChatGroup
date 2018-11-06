@@ -12,7 +12,6 @@ const store = configureStore();
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    // console.log(user)
     const name = user.displayName ? user.displayName : user.email;
     store.dispatch(login(user.uid, name, user.photoURL));
     if (history.location.pathname === '/') {

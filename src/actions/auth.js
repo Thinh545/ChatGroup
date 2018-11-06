@@ -8,8 +8,8 @@ export const login = (uid, name, photo) => ({
   photo
 });
 
-export const startLogin = () => {
-  return () => {
+export const startLogin = () =>
+  () => {
     return firebase.auth().signInWithPopup(provider).then((result) => {
       var token = result.credential.accessToken;
       // The signed-in user info.
@@ -29,16 +29,14 @@ export const startLogin = () => {
       })
     });
   };
-};
 
 export const logout = () => ({
   type: 'LOGOUT'
 });
 
-export const startLogout = () => {
-  return () => {
+export const startLogout = () =>
+  () => {
     database.ref(`users/${firebase.auth().currentUser.uid}/active`).set(false)
     database.ref(`users/${firebase.auth().currentUser.uid}/lastTime`).set(dateformat(Date(), "yyyy/dd/mm HH:MM"))
     return firebase.auth().signOut();
   };
-};

@@ -2,6 +2,7 @@ import React from 'react';
 import Users from './Users'
 import Messages from './Messages'
 import { connect } from 'react-redux';
+import { startUserChange } from '../actions/messages'
 
 export class Home extends React.Component {
     state = {
@@ -11,11 +12,7 @@ export class Home extends React.Component {
     }
 
     handleOnClick = (user) => {
-        if (user !== this.state.user.uid) {
-            this.setState({
-                user: user,
-            })
-        }
+        this.props.startUserChange(user.uid);
     }
 
     render() {
@@ -66,4 +63,8 @@ const mapStateToProps = (state) => ({
     auth: state.auth,
 });
 
-export default connect(mapStateToProps, undefined)(Home);
+const mapDispatchToProps = (dispatch) => ({
+    startUserChange: (uid) => dispatch(startUserChange(uid)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

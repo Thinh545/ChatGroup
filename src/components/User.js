@@ -1,21 +1,22 @@
 import React from 'react';
 
 export class User extends React.Component {
-    clickOnUser = () => {
-        this.props.handleOnClick(this.props.data)
+
+    userOnClick = () => {
+        this.props.handleOnClick(this.props.user);
     }
 
     render() {
         return (
-            <li className="contact" onClick={this.clickOnUser}>
+            <li className="contact" onClick={() => this.userOnClick()}>
                 <div className="wrap">
-                    <span className={this.props.data.active ? "contact-status online" : "contact-status"}></span>
-                    <img src={this.props.data.photo} alt="" />
+                    <span className={this.props.user.active ? "contact-status online" : "contact-status"}></span>
+                    <img src={this.props.user.photo} alt="" />
                     <div className="meta">
-                        <p className="name">{this.props.data.name}</p>
+                        <p className="name">{this.props.user.name}</p>
                         <p className="preview">
                             {
-                                this.props.data.active ? "online" : this.props.data.lastTime
+                                this.props.user.active ? "online" : this.props.user.lastTime
                             }
                         </p>
                     </div>
