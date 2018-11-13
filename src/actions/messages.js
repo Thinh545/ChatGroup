@@ -139,9 +139,11 @@ export const getStar = (uid) => {
         const firebase = getFirebase();
         const auth = getState().auth
 
-        return  firebase.database().ref(`users/${auth.uid}/stat/${uid}/star`).once('value', (snapshot) => {
-                if(snapshot.val())
-                    dispatch(changeStar(snapshot.val()))
+        return firebase.database().ref(`users/${auth.uid}/stat/${uid}/star`).once('value', (snapshot) => {
+            if (snapshot.val())
+                dispatch(changeStar(snapshot.val()))
+            else
+                dispatch(changeStar(false))
         })
     }
 }
