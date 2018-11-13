@@ -44,11 +44,6 @@ export class Home extends React.Component {
                         </div>
                     </div>
 
-                    <div id="search">
-                        <label htmlFor=""><i className="fa fa-search" aria-hidden="true"></i></label>
-                        <input type="text" placeholder="Search contacts..." />
-                    </div>
-
                     <Users handleOnClick={this.handleOnClick} />
                 </div>
 

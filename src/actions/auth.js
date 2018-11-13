@@ -4,7 +4,8 @@ export const login = (uid, name, photo) => ({
   type: 'LOGIN',
   uid,
   name,
-  photo
+  photo,
+
 });
 
 export const startLogin = () =>

@@ -1,4 +1,7 @@
+import { stat } from "fs";
+
 const defaultState = {
+    star: false,
     user: {
         uid: null,
         displayName: "Chat With Ghost",
@@ -11,6 +14,7 @@ export default (state = defaultState, action) => {
     switch (action.type) {
         case 'MESSAGES_CHANGE':
             return {
+                star: state.star,
                 user: state.user,
                 list: [...state.list, action.mess]
             }
@@ -18,14 +22,23 @@ export default (state = defaultState, action) => {
         case 'USER_CHANGE':
             if (action.list)
                 return ({
+                    star: state.star,
                     user: action.user,
                     list: action.list,
                 })
             else
                 return {
+                    star: state.star,
                     user: action.user,
                     list: []
                 }
+
+        case 'STAR_CHANGE':
+            return ({
+                star: action.star,
+                user: state.user,
+                list: state.list,
+            })
 
         default:
             return state;

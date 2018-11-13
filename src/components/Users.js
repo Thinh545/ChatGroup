@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { startUsersList } from '../actions/users'
 
 export class Users extends React.Component {
+    state = ({
+        filter: "",
+    })
+
     componentWillMount() {
         this.props.startUsersList();
     }
@@ -11,20 +15,35 @@ export class Users extends React.Component {
     createUserComponent = () => {
         let listUser = [];
         this.props.users.forEach(element => {
-            listUser.push(
-                <User key={element.uid} user={element} handleOnClick={this.props.handleOnClick} />
-            )
+            if (this.state.filter === "" ||
+                element.displayName.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1) {
+                listUser.push(
+                    <User key={element.uid} user={element} handleOnClick={this.props.handleOnClick} />
+                )
+            }
         });
 
         return listUser;
     }
 
+    handleSearchChange = (e) => {
+        this.setState({
+            filter: e.target.value,
+        })
+    }
+
     render() {
         return (
-            <div id="contacts">
-                <ul>
-                    {this.createUserComponent()}
-                </ul>
+            <div>
+                <div id="search">
+                    <label htmlFor=""><i className="fa fa-search" aria-hidden="true"></i></label>
+                    <input type="text" placeholder="Search contacts..." onChange={this.handleSearchChange} />
+                </div>
+                <div id="contacts">
+                    <ul>
+                        {this.createUserComponent()}
+                    </ul>
+                </div>
             </div>
         )
     }
