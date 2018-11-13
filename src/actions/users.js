@@ -16,7 +16,7 @@ export const startUsersList = () => {
 
             const authStat = list.find(obj => obj.uid === auth.uid);
             list = list.sort((b, a) => {
-                if (authStat.stat) {
+                if (authStat && authStat.stat) {
                     const astat = authStat.stat[`${a.uid}`]
                     const bstat = authStat.stat[`${b.uid}`]
 
@@ -43,7 +43,10 @@ export const startUsersList = () => {
                         return 1
                     }
                 } else {
-                    return 1
+                    if ((b.active !== true && a.active === true) ||
+                        (b.active === true && a.active !== true)) {
+                        return (b.active !== true) ? 1 : -1
+                    }
                 }
             })
 
